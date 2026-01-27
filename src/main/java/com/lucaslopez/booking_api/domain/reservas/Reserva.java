@@ -3,10 +3,7 @@ package com.lucaslopez.booking_api.domain.reservas;
 import com.lucaslopez.booking_api.domain.prestaciones.Prestacion;
 import com.lucaslopez.booking_api.domain.usuarios.Usuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Builder
 public class Reserva {
 
     @Id
@@ -41,6 +39,10 @@ public class Reserva {
 
     public void actualizarReserva(Prestacion nuevaPrestacion) {
         this.prestacion = nuevaPrestacion;
+    }
+
+    public void cancelar() {
+        this.estado = Estado.CANCELADO;
     }
 
     public void setFechaInicio(LocalDateTime fecha) {

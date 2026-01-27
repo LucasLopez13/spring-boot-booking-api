@@ -17,7 +17,7 @@ public class ValidadorDeDuracion implements ValidadorReserva {
         if (duracion.toMinutes() < 30) {
             throw new ValidacionException("La duracion minima de la reserva es de 30 minutos");
         }
-        if (duracion.toHours() > 4) {
+        if (duracion.toMinutes() > 240) {
             throw new ValidacionException("La duracion maxima de la reserva es de 4 horas");
         }
     }

@@ -1,10 +1,9 @@
 package com.lucaslopez.booking_api.domain.prestaciones;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Table(name = "prestaciones")
 @Entity(name = "Prestacion")
@@ -12,6 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Builder
+@SQLDelete(sql = "UPDATE prestaciones SET activo = false WHERE id = ?")
+@SQLRestriction("activo = true")
 public class Prestacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +21,7 @@ public class Prestacion {
     private String nombre;
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
+    private boolean activo = true;
 
     public Prestacion(DatosRegistroPrestacion datos) {
         this.id = null;

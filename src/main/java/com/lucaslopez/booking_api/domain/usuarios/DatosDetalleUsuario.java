@@ -1,17 +1,18 @@
 package com.lucaslopez.booking_api.domain.usuarios;
 
-import jakarta.validation.constraints.NotNull;
 
 public record DatosDetalleUsuario(
         Long id,
         String nombre,
-        String email
+        String email,
+        Role role
 ) {
     public DatosDetalleUsuario(Usuario usuario) {
         this(
                 usuario.getId(),
                 usuario.getNombre(),
-                usuario.getEmail()
+                usuario.getEmail(),
+                usuario.getRole()
         );
     }
 }

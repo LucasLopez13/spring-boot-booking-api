@@ -29,15 +29,16 @@ public class ReservaService {
         var prestacion = prestacionRepository.findById(datos.idPrestacion())
                 .orElseThrow(() -> new ValidacionException("No existe un prestacion con ese ID"));
 
-        var reserva = new Reserva(datos,usuario,prestacion);
+        var reserva = new Reserva(datos, usuario, prestacion);
 
         usuario.agregarReserva(reserva);
 
         return reservaRepository.save(reserva);
     }
 
-    public Reserva detallarReserva(Long id) {
-        return buscarReservaPorId(id);
+    public DatosDetalleReserva detallarReserva(Long id) {
+        var reserva = buscarReservaPorId(id);
+        return new DatosDetalleReserva(reserva);
     }
 
     public Reserva actualizarReserva(Long id, DatosActualizacionReserva datos) {
@@ -47,7 +48,7 @@ public class ReservaService {
         var fechaInicio = datos.fechaInicio() != null ? datos.fechaInicio() : reserva.getFechaDeInicio();
         var fechaFinal = datos.fechaFin() != null ? datos.fechaFin() : reserva.getFechaDeFin();
 
-        var datosParaValidar = new DatosRegistroReserva(reserva.getUsuario().getId(),idFinal,fechaInicio,fechaFinal);
+        var datosParaValidar = new DatosRegistroReserva(reserva.getUsuario().getId(), idFinal, fechaInicio, fechaFinal);
 
         validadores.forEach(v -> v.validar(datosParaValidar));
 
@@ -56,15 +57,17 @@ public class ReservaService {
                     .orElseThrow(() -> new ValidacionException("No existe un prestacion con ese ID"));
             reserva.actualizarReserva(nuevaPrestacion);
         }
-        if (datos.fechaInicio() != null) reserva.setFechaInicio(datos.fechaInicio());
-        if (datos.fechaFin() != null) reserva.setFechaFin(datos.fechaFin());
+        if (datos.fechaInicio() != null)
+            reserva.setFechaInicio(datos.fechaInicio());
+        if (datos.fechaFin() != null)
+            reserva.setFechaFin(datos.fechaFin());
 
         return reserva;
     }
 
     public void eliminarReserva(Long id) {
         var reserva = buscarReservaPorId(id);
-        reservaRepository.deleteById(reserva.getId());
+        reserva.cancelar();
     }
 
     private Reserva buscarReservaPorId(Long id) {

@@ -1,5 +1,7 @@
 package com.lucaslopez.booking_api.domain.reservas;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +21,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             @Param("idPrestacion") Long idPrestacion,
             @Param("fechaInicio") LocalDateTime fechaInicio,
             @Param("fechaFin") LocalDateTime fechaFin);
+
+    Page<Reserva> findByUsuarioId(Long usuarioId, Pageable pageable);
 }

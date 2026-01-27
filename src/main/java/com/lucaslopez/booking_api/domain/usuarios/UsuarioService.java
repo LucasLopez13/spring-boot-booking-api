@@ -31,8 +31,10 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario detallarUsuario(Long id) {
-        return buscarUsuarioPorId(id);
+    public DatosDetalleUsuario detallarUsuario(Long id) {
+        var usuario = buscarUsuarioPorId(id);
+
+        return new DatosDetalleUsuario(usuario);
     }
 
     public Usuario actualizarUsuario(Long id,DatosActualizacionUsuario datos) {
@@ -68,5 +70,13 @@ public class UsuarioService {
                 throw new ValidacionException("El email ya se encuentra en el sistema");
             }
         }
+    }
+
+    public Usuario cambiarRol(Long id, Role role) {
+        var usuario =  buscarUsuarioPorId(id);
+
+        usuario.asignarRole(role);
+
+        return usuario;
     }
 }

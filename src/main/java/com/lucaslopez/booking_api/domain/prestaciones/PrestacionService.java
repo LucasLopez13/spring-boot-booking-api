@@ -18,13 +18,13 @@ public class PrestacionService {
         return prestacionRepository.save(prestacion);
     }
 
-    public Prestacion detallarPrestacion(Long id) {
-        return buscarPrestacionPorId(id);
+    public DatosDetallePrestacion detallarPrestacion(Long id) {
+        var prestacion = buscarPrestacionPorId(id);
+        return new DatosDetallePrestacion(prestacion);
     }
 
-
     public Prestacion actualizarPrestacion(Long id, DatosActualizacionPrestacion datos) {
-        var prestacion =  buscarPrestacionPorId(id);
+        var prestacion = buscarPrestacionPorId(id);
 
         if (datos.nombre() != null && !datos.nombre().equals(prestacion.getNombre())) {
             validarNombreUnico(datos.nombre());
@@ -36,7 +36,7 @@ public class PrestacionService {
     }
 
     public void eliminarPrestacion(Long id) {
-        var prestacion =  buscarPrestacionPorId(id);
+        var prestacion = buscarPrestacionPorId(id);
         prestacionRepository.deleteById(prestacion.getId());
     }
 
@@ -51,5 +51,3 @@ public class PrestacionService {
         }
     }
 }
-
-

@@ -5,5 +5,6 @@ public enum Tipo {
     CANCHA_VOLEY,
     SALON,
     QUINCHO,
-    PILETA
+    PILETA,
+    PADEL
 }
