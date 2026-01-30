@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: booking-api
+    ports:
+      - "8080:8080" # Puerto PC
+    depends_on:
+      db:
+        condition: service_healthy #Condition para solucionar condición de carrera
+    environment:
+      # Variables de app-properties
+      - DB_HOST=db
+      - DB_NAME=booking_api
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - JWT_SECRET=123456
+    networks:
+      - booking-network
+
+  # --- BASE DE DATOS MYSQL ---
+  db:
+    image: mysql:8.0
+    container_name: booking-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: booking_api
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+      - booking-network
+
+volumes:
+  mysql_data:
+
+networks:
+  booking-network:
+    driver: bridge
