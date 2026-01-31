@@ -31,7 +31,15 @@ public class ReservaController {
     @Transactional
     @PostMapping
     public ResponseEntity registrarReserva(@RequestBody @Valid DatosRegistroReserva datos,
-            UriComponentsBuilder uriBuilder) {
+            UriComponentsBuilder uriBuilder,
+            @AuthenticationPrincipal Usuario usuarioLogueado) {
+
+        if (!usuarioLogueado.getRole().equals(Role.ADMIN) &&
+                !usuarioLogueado.getId().equals(datos.idUsuario())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("No tienes permisos para reservar a nombre de otro usuario.");
+        }
+
         var reserva = reservaService.registrarReserva(datos);
 
         var uri = uriBuilder.path("/reservas/{id}").buildAndExpand(reserva.getId()).toUri();
